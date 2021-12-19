@@ -26,7 +26,7 @@ route.post('/send-email', (req, res) => {
     }, (error, info) => {
         if (error) {
             console.log(error);
-            res.status(500).send({
+            return res.status(500).send({
                 error: 'Email not sent'
             });
         }

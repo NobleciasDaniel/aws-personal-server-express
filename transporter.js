@@ -1,6 +1,10 @@
 const nodemailer = require('nodemailer');
 const RedisClient = require('./redis-client').default;
 console.log(process.env);
+console.log({
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+})
 const client = new RedisClient({
     host: '127.0.0.1',
     port: 6379,

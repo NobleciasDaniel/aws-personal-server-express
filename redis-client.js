@@ -5,7 +5,8 @@ exports.default = class RedisClient {
     constructor({host, port, password}) {
         this.client = redis.createClient({
             host, port, password
-        })
+        });
+        this.client.connect();
         this.client.on('error', (err) => {
             console.log('Redis-error: ', err);
         })

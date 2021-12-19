@@ -1,0 +1,29 @@
+{
+  "name": "aws-personal-server-express",
+  "version": "0.0.1",
+  "description": "inplementation of nodemail",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NobleciasDaniel/aws-personal-server-express.git"
+  },
+  "author": "nobleciasdaniel@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NobleciasDaniel/aws-personal-server-express/issues"
+  },
+  "homepage": "https://github.com/NobleciasDaniel/aws-personal-server-express#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "nodemailer": "^6.7.2",
+    "redis": "^4.0.1"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  }
+}

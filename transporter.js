@@ -3,7 +3,7 @@ const RedisClient = require('./redis-client').default;
 const client = new RedisClient({
     host: '127.0.0.1',
     port: 6379,
-    password: ''
+    password: 'X7ZIcVHLDGfBbnxakUWjuuK11uAg9g7kMHiUo2N24eogKzrPLW09X6/EjZI+0YyO36XkgwDlmn+7yJWb'
 });
 console.log(client.setKey({
     key: 'hola',

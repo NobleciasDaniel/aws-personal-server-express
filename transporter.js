@@ -1,4 +1,16 @@
 const nodemailer = require('nodemailer');
+const RedisClient = require('./redis-client').default;
+const client = new RedisClient({
+    host: '127.0.0.1',
+    port: 6379,
+    password: ''
+});
+console.log(client.setKey({
+    key: 'hola',
+    value: 'hola'
+}).then(resp => {
+    console.log(resp);
+}));
 const transporter = nodemailer.createTransport({
     port: 465,
     host: 'smtp.gmail.com',

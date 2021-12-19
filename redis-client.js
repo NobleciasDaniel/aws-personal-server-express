@@ -1,6 +1,6 @@
 const redis = require('redis');
 
-export class RedisClient {
+exports.default = class RedisClient {
 
     constructor({host, port, password}) {
         this.client = redis.createClient({

@@ -55,10 +55,22 @@ route.post('/send-email', (req, res) => {
 });
 
 route.post('/verify-opt', (req, res) => {
-    console.log('COOKIES: ', req.cookies);
-    console.log('SIGNED_COOKIES: ', req.signedCookies);
-    console.log('HEADERS', req.headers);
-    res.status(200).send({
-        echo: JSON.stringify(req.cookies)
+    console.log({
+        key: req.cookies['user'],
+        pass: req.body.password,
+    });
+    transporter.verifyOTP({
+        key: req.cookies['user'],
+        pass: req.body.password,
+    }).then( resp => {
+        console.log(resp);
+        res.status(200).send({
+            echo: JSON.stringify(resp)
+        });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({
+            error: err
+        });
     })
 })

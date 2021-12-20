@@ -14,7 +14,6 @@ exports.default = class RedisClient {
 
     setKey({key,value}){
         return new Promise((resolve, reject) => {
-            console.log('TO SAVE', {key, value});
             this.client.setEx(key, 60 ,value).then(resp => {
                 return resolve(resp);
             }).catch( (err) => {

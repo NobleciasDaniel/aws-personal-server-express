@@ -44,10 +44,8 @@ exports.generateUser = function (email) {
         const token = jwt.create({email, pass}, process.env.TOKEN_SECRET);
         token.setExpiration(new Date().getTime() + 60 * 1000)
         client.setKey({key: user, value: token.compact()}).then( resp => {
-            console.log('SUCCES',resp);
             resolve({user, pass});
         }).catch( err => {
-            console.log('err', err);
             reject(err);
         });
     });

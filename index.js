@@ -4,12 +4,13 @@ require('dotenv').config({
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const transporter = require('./transporter');
 const dayjs = require('dayjs');
 
 const app = express();
 app.use(bodyParser.json());
-
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
 
 const route = express.Router();

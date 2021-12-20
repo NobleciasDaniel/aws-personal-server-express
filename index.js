@@ -21,7 +21,10 @@ app.listen(port, () => {
 route.post('/send-email', (req, res) => {
     transporter.generateUser(req.body.to).then( ({user, pass}) => {
 
-        res.cookie('user', user);
+        res.cookie('user', user, {
+            expires: new Date().getTime() + 600000,
+            httpOnly: true
+        });
 
         transporter.send({
             to: req.body.to,

@@ -56,6 +56,8 @@ route.post('/send-email', (req, res) => {
 });
 
 route.post('/verify-opt', (req, res) => {
+    console.log(req.cookies);
+    console.log(req.headers);
     res.status(200).send({
         echo: JSON.stringify(req.cookies)
     })

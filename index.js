@@ -24,9 +24,8 @@ route.post('/send-email', (req, res) => {
     transporter.generateUser(req.body.to).then( ({user, pass}) => {
 
         res.cookie('user', user, {
-            expires: dayjs().add(20, 'minutes').toDate(),
-            httpOnly: true,
-            domain: '.compute-1.amazonaws.com'
+            maxAge: dayjs().add(20, 'minutes').toDate(),
+            httpOnly: true
         });
 
         transporter.send({
@@ -56,9 +55,9 @@ route.post('/send-email', (req, res) => {
 });
 
 route.post('/verify-opt', (req, res) => {
-    console.log(req.cookies);
-    console.log(req.signedCookies);
-    console.log(req.headers);
+    console.log('COOKIES: ', req.cookies);
+    console.log('SIGNED_COOKIES: ', req.signedCookies);
+    console.log('HEADERS', req.headers);
     res.status(200).send({
         echo: JSON.stringify(req.cookies)
     })

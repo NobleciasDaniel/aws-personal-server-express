@@ -3,6 +3,11 @@ const RedisClient = require('./redis-client').default;
 const crypto = require('crypto');
 const jwt = require('njwt');
 
+const createOTP = function () {
+    const spaces = ['','','','',''];
+    return spaces.map( val => Math.floor(Math.random()*9)).join('');
+}
+
 const client = new RedisClient({
     host: '127.0.0.1',
     port: 6379,
@@ -35,7 +40,7 @@ exports.send = function (data, callback) {
 exports.generateUser = function (email) {
     return new Promise((resolve, reject) => {
         const user = crypto.createHash('md5').update(email).digest('hex');
-        const pass = crypto.createHash('md5').update(user).digest('hex');
+        const pass = createOTP();
         const token = jwt.create({email, pass}, process.env.TOKEN_SECRET);
         token.setExpiration(new Date().getTime() + 60 * 1000)
         client.setKey({key: user, value: token.compact()}).then( resp => {

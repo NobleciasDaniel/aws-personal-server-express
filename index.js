@@ -59,18 +59,25 @@ route.post('/verify-opt', (req, res) => {
         key: req.cookies['user'],
         pass: req.body.password,
     });
-    transporter.verifyOTP({
-        key: req.cookies['user'],
-        pass: req.body.password,
-    }).then( resp => {
-        console.log(resp);
-        res.status(200).send({
-            echo: JSON.stringify(resp)
-        });
-    }).catch(err => {
-        console.log(err);
+    try{
+        transporter.verifyOTP({
+            key: req.cookies['user'],
+            pass: req.body.password,
+        }).then( resp => {
+            console.log(resp);
+            res.status(200).send({
+                echo: JSON.stringify(resp)
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send({
+                error: err
+            });
+        })
+    }catch (e) {
+        console.log(e);
         res.status(500).send({
-            error: err
+            error: e
         });
-    })
+    }
 })

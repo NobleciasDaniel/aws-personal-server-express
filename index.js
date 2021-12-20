@@ -1,9 +1,11 @@
 require('dotenv').config({
     path: 'environment/.env'
 })
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const transporter = require('./transporter');
+const dayjs = require('dayjs');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,7 +24,7 @@ route.post('/send-email', (req, res) => {
     transporter.generateUser(req.body.to).then( ({user, pass}) => {
 
         res.cookie('user', user, {
-            expires: new Date().getTime() + 600000,
+            expires: dayjs().add(20, 'minutes').toDate(),
             httpOnly: true
         });
 

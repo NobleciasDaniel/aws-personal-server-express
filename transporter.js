@@ -1,10 +1,8 @@
 const nodemailer = require('nodemailer');
 const RedisClient = require('./redis-client').default;
-console.log(process.env);
-console.log({
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-})
+const crypto = require('crypto');
+const jwt = require('njwt');
+
 const client = new RedisClient({
     host: '127.0.0.1',
     port: 6379,
@@ -21,7 +19,7 @@ const transporter = nodemailer.createTransport({
 })
 
 exports.send = function (data, callback) {
-    const {to, subject, text} = data;
+    const {to, subject, text, pass} = data;
     console.log(data);
     if (!to || !subject || !text) return new Error('parameter not valid');
     const mailData = {
@@ -29,7 +27,21 @@ exports.send = function (data, callback) {
         to,
         subject,
         text,
-        html: '<h1>Su contraseña temporal es: </h1>'
+        html: `<h1>Su contraseña temporal es: ${pass}</h1>`
     }
     transporter.sendMail(mailData, callback)
 };
+
+exports.generateUser = function (email) {
+    return new Promise((resolve, reject) => {
+        const user = crypto.createHash('md5').update(email).digest('hex');
+        const pass = crypto.createHash('md5').update(user).digest('hex');
+        const token = jwt.create({email, pass}, process.env.TOKEN_SECRET);
+        token.setExpiration(new Date().getTime() + 60 * 1000)
+        client.setKey({key: user, value: token.compact()}).then( resp => {
+            resolve({user, pass});
+        }).catch( err => {
+            reject(err);
+        });
+    });
+}

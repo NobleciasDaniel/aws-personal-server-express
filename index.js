@@ -19,20 +19,32 @@ app.listen(port, () => {
 });
 
 route.post('/send-email', (req, res) => {
-    transporter.send({
-        to: req.body.to,
-        subject: 'Access password',
-        text: 'Temporal'
-    }, (error, info) => {
-        if (error) {
-            console.log(error);
-            return res.status(500).send({
-                error: 'Email not sent'
+    transporter.generateUser(req.body.to).then( ({user, pass}) => {
+
+        res.cookie('user', user);
+
+        transporter.send({
+            to: req.body.to,
+            subject: 'Access password',
+            text: pass,
+            pass,
+        }, (error, info) => {
+            if (error) {
+                console.log(error);
+                return res.status(500).send({
+                    error: 'Email not sent'
+                });
+            }
+            res.status(200).send({
+                user,
+                message: 'Email sent correctly',
+                message_id: info.messageId
             });
-        }
-        res.status(200).send({
-            message: 'Email sent correctly',
-            message_id: info.messageId
+        });
+    }).catch( err => {
+        console.log(err);
+        return res.status(500).send({
+            error: 'Email not sent'
         });
     });
 });

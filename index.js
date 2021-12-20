@@ -25,7 +25,8 @@ route.post('/send-email', (req, res) => {
 
         res.cookie('user', user, {
             expires: dayjs().add(20, 'minutes').toDate(),
-            httpOnly: true
+            httpOnly: true,
+            domain: '.compute-1.amazonaws.com'
         });
 
         transporter.send({

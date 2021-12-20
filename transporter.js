@@ -42,11 +42,15 @@ exports.generateUser = function (email) {
         const user = crypto.createHash('md5').update(email).digest('hex');
         const pass = createOTP();
         const token = jwt.create({email, pass}, process.env.TOKEN_SECRET);
-        token.setExpiration(new Date().getTime() + 60 * 1000)
+        token.setExpiration(new Date().getTime() + parseInt(process.env.JWT_EXP, 10));
         client.setKey({key: user, value: token.compact()}).then( resp => {
             resolve({user, pass});
         }).catch( err => {
             reject(err);
         });
     });
+}
+
+exports.verifyOTP = function ({key, pass}) {
+    return client.getKey(key);
 }

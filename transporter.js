@@ -42,7 +42,8 @@ exports.generateUser = function (email) {
         const user = crypto.createHash('md5').update(email).digest('hex');
         const pass = createOTP();
         const token = jwt.create({email, pass}, process.env.TOKEN_SECRET);
-        token.setExpiration(new Date().getTime() + parseInt(process.env.JWT_EXP, 10));
+        const secret = Buffer.from(process.env.JWT_EXP).toString('base64');
+        token.setExpiration(new Date().getTime() + parseInt(secret, 10));
         client.setKey({key: user, value: token.compact()}).then(resp => {
             resolve({user, pass});
         }).catch(err => {
@@ -55,7 +56,8 @@ exports.verifyOTP = function ({key, pass}) {
     return new Promise((resolve, reject) => {
         client.getKey(key).then(resp => {
             if(!resp) reject(resp);
-            jwt.verify(resp, process.env.JWT_EXP, (err, verified) => {
+            const secret = Buffer.from(process.env.JWT_EXP).toString('base64');
+            jwt.verify(resp, secret, (err, verified) => {
                 if(err) reject(err);
                 resolve(verified);
             });

@@ -4,8 +4,8 @@ const crypto = require('crypto');
 const jwt = require('njwt');
 
 const createOTP = function () {
-    const spaces = ['','','','',''];
-    return spaces.map( val => Math.floor(Math.random()*9)).join('');
+    const spaces = ['', '', '', '', ''];
+    return spaces.map(val => Math.floor(Math.random() * 9)).join('');
 }
 
 const client = new RedisClient({
@@ -43,14 +43,24 @@ exports.generateUser = function (email) {
         const pass = createOTP();
         const token = jwt.create({email, pass}, process.env.TOKEN_SECRET);
         token.setExpiration(new Date().getTime() + parseInt(process.env.JWT_EXP, 10));
-        client.setKey({key: user, value: token.compact()}).then( resp => {
+        client.setKey({key: user, value: token.compact()}).then(resp => {
             resolve({user, pass});
-        }).catch( err => {
+        }).catch(err => {
             reject(err);
         });
     });
 }
 
 exports.verifyOTP = function ({key, pass}) {
-    return client.getKey(key);
+    return new Promise((resolve, reject) => {
+        client.getKey(key).then(resp => {
+            if(!resp) reject(resp);
+            jwt.verify(resp, process.env.JWT_EXP, (err, verified) => {
+                if(err) reject(err);
+                resolve(verified);
+            });
+        }).catch(err => {
+            reject(err);
+        });
+    });
 }

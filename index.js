@@ -60,7 +60,8 @@ route.post('/verify-opt', (req, res) => {
         pass: req.body.password,
     }).then(resp => {
         console.log(resp);
-        res.status(200).send(resp);
+        if(resp) return res.status(200).send(resp);
+        return res.status(401).send(resp);
     }).catch(err => {
         console.log(err);
         res.status(500).send({

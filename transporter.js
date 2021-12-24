@@ -57,7 +57,8 @@ exports.verifyOTP = function ({key, pass}) {
             if(!resp) reject(resp);
             jwt.verify(resp, process.env.TOKEN_SECRET, (err, verified) => {
                 if(err) reject(err);
-                resolve(verified);
+                if(pass === verified?.body?.pass) return resolve(true);
+                return resolve(false);
             });
         }).catch(err => {
             reject(err);

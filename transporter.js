@@ -53,5 +53,6 @@ exports.generateUser = function (email) {
 
 exports.verifyOTP = function ({key, pass}) {
     console.log('TRANSPORTE:: ', key);
-    //return client.getKey(key);
+    console.log(client.getKey);
+    return client.getKey(key);
 }

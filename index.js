@@ -77,7 +77,7 @@ route.post('/verify-opt', (req, res) => {
     }catch (e) {
         console.log(e);
         res.status(500).send({
-            error: e
+            error: JSON.stringify(e)
         });
     }
 })

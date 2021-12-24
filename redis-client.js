@@ -13,30 +13,24 @@ exports.default = class RedisClient {
         })
     }
 
-    setKey({key,value}){
+    setKey({key, value}) {
         return new Promise((resolve, reject) => {
-            this.client.setEx(key, this.expirationTime ,value).then(resp => {
+            this.client.setEx(key, this.expirationTime, value).then(resp => {
                 return resolve(resp);
-            }).catch( (err) => {
-               return reject(err);
+            }).catch((err) => {
+                return reject(err);
             });
         });
     }
 
-    getKey(key){
+    getKey(key) {
         return new Promise((resolve, reject) => {
             console.log('ON REDIS', key);
-            try{
-                this.client.get(key, function (error, replay){
-                    console.log('REDIS', error, replay);
-                    if(error) reject(error);
-                    resolve(replay);
-                });
-            }catch (e) {
-                console.log(e);
-                reject(e);
-            }
-
+            this.client.get(key).then(resp => {
+                return resolve(resp);
+            }).catch(err => {
+                return reject(err)
+            })
         })
     }
 

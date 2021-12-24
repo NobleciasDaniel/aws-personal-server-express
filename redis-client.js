@@ -25,7 +25,6 @@ exports.default = class RedisClient {
 
     getKey(key) {
         return new Promise((resolve, reject) => {
-            console.log('ON REDIS', key);
             this.client.get(key).then(resp => {
                 return resolve(resp);
             }).catch(err => {

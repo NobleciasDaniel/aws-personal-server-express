@@ -52,7 +52,5 @@ exports.generateUser = function (email) {
 }
 
 exports.verifyOTP = function ({key, pass}) {
-    console.log('TRANSPORTE:: ', key);
-    console.log(client.getKey);
     return client.getKey(key);
 }

@@ -21,7 +21,7 @@ app.listen(port, () => {
 });
 
 route.post('/send-email', (req, res) => {
-    transporter.generateUser(req.body.to).then( ({user, pass}) => {
+    transporter.generateUser(req.body.to).then(({user, pass}) => {
 
         res.cookie('user', user, {
             maxAge: dayjs().add(20, 'minutes').toDate(),
@@ -46,7 +46,7 @@ route.post('/send-email', (req, res) => {
                 message_id: info.messageId
             });
         });
-    }).catch( err => {
+    }).catch(err => {
         console.log(err);
         return res.status(500).send({
             error: 'Email not sent'
@@ -55,29 +55,18 @@ route.post('/send-email', (req, res) => {
 });
 
 route.post('/verify-opt', (req, res) => {
-    console.log({
+    transporter.verifyOTP({
         key: req.cookies['user'],
         pass: req.body.password,
-    });
-    try{
-        transporter.verifyOTP({
-            key: req.cookies['user'],
-            pass: req.body.password,
-        }).then( resp => {
-            console.log(resp);
-            res.status(200).send({
-                echo: JSON.stringify(resp)
-            });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).send({
-                error: err
-            });
-        })
-    }catch (e) {
-        console.log(e);
-        res.status(500).send({
-            error: JSON.stringify(e)
+    }).then(resp => {
+        console.log(resp);
+        res.status(200).send({
+            echo: JSON.stringify(resp)
         });
-    }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({
+            error: err
+        });
+    })
 })
